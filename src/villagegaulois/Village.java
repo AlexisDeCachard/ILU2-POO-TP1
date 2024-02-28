@@ -59,18 +59,38 @@ public class Village {
 		return chaine.toString();
 	}
 	
-	public String installerVendeur(Gaulois vendeur,String Produit,int nbProduit) {
+	public String installerVendeur(Gaulois vendeur,String produit,int nbProduit) {
 		StringBuilder chaine = new StringBuilder();
 		String nomVendeur=vendeur.getNom();
-		chaine.append(nomVendeur + " cherche un endroit pour vendre " + nbProduit+ " "+Produit+".\n");
+		chaine.append(nomVendeur + " cherche un endroit pour vendre " + nbProduit+ " "+produit+".\n");
 		int indiceEtalLibre=marche.trouverEtalLibre();
 		if (indiceEtalLibre==-1) {
 			chaine.append("Il n'y a plus d'étals disponibles dans le marché.\n");
 			return chaine.toString();
 		}
-		marche.utiliserEtal(indiceEtalLibre, vendeur, Produit, nbProduit);
+		marche.utiliserEtal(indiceEtalLibre, vendeur, produit, nbProduit);
 		indiceEtalLibre++;
-		chaine.append("Le vendeur " + nomVendeur + " vend des " + Produit + " à l'étal n°" + indiceEtalLibre + ".\n" );
+		chaine.append("Le vendeur " + nomVendeur + " vend des " + produit + " à l'étal n°" + indiceEtalLibre + ".\n" );
+		return chaine.toString();
+	}
+	
+	public String rechercherVendeursProduit(String produit) {
+		Etal[] etalVendantProduit=marche.trouverEtals(produit);
+		StringBuilder chaine=new StringBuilder();
+		if (etalVendantProduit.length==0) {
+			chaine.append("Il n'y a pas de vendeurs proposant des " + produit+ " au marché.\n");
+			return chaine.toString();
+		}
+		else if(etalVendantProduit.length==1){
+			Gaulois vendeur=etalVendantProduit[0].getVendeur();
+			chaine.append("Seul le vendeur " + vendeur.getNom() + " propose des "+produit+ " au marché.\n");
+			return chaine.toString();
+		}
+		chaine.append("Les vendeurs qui proposent des "+ produit + " sont :\n");
+		for (Etal etal : etalVendantProduit) {
+			Gaulois vendeur=etal.getVendeur();
+			chaine.append("- "+ vendeur.getNom()+"\n");
+		}
 		return chaine.toString();
 	}
 	
@@ -101,7 +121,7 @@ public class Village {
 			int nbEtalsVendantProduit=0;
 			for (int i = 0; i < etals.length; i++) {
 				Etal etalActuel=etals[i];
-				if (etalActuel.contientProduit(produit)) {
+				if (etalActuel.isEtalOccupe()&&etalActuel.contientProduit(produit)) {
 					nbEtalsVendantProduit ++;
 				}
 			}
@@ -109,7 +129,7 @@ public class Village {
 			int indiceEtal = 0;
 			for (int j = 0; j < etals.length; j++) {
 				Etal etalActuel=etals[j];
-					if (etalActuel.contientProduit(produit)) {
+					if (etalActuel.isEtalOccupe()&&etalActuel.contientProduit(produit)) {
 						etalsVendantProduit[indiceEtal]=etalActuel;
 						indiceEtal ++;
 				}
