@@ -65,12 +65,12 @@ public class Village {
 		chaine.append(nomVendeur + " cherche un endroit pour vendre " + nbProduit+ " "+produit+".\n");
 		int indiceEtalLibre=marche.trouverEtalLibre();
 		if (indiceEtalLibre==-1) {
-			chaine.append("Il n'y a plus d'étals disponibles dans le marché.\n");
+			chaine.append("Il n'y a plus d'ï¿½tals disponibles dans le marchï¿½.\n");
 			return chaine.toString();
 		}
 		marche.utiliserEtal(indiceEtalLibre, vendeur, produit, nbProduit);
 		indiceEtalLibre++;
-		chaine.append("Le vendeur " + nomVendeur + " vend des " + produit + " à l'étal n°" + indiceEtalLibre + ".\n" );
+		chaine.append("Le vendeur " + nomVendeur + " vend des " + produit + " ï¿½ l'ï¿½tal nï¿½" + indiceEtalLibre + ".\n" );
 		return chaine.toString();
 	}
 	
@@ -78,12 +78,12 @@ public class Village {
 		Etal[] etalVendantProduit=marche.trouverEtals(produit);
 		StringBuilder chaine=new StringBuilder();
 		if (etalVendantProduit.length==0) {
-			chaine.append("Il n'y a pas de vendeurs proposant des " + produit+ " au marché.\n");
+			chaine.append("Il n'y a pas de vendeurs proposant des " + produit+ " au marchï¿½.\n");
 			return chaine.toString();
 		}
 		else if(etalVendantProduit.length==1){
 			Gaulois vendeur=etalVendantProduit[0].getVendeur();
-			chaine.append("Seul le vendeur " + vendeur.getNom() + " propose des "+produit+ " au marché.\n");
+			chaine.append("Seul le vendeur " + vendeur.getNom() + " propose des "+produit+ " au marchï¿½.\n");
 			return chaine.toString();
 		}
 		chaine.append("Les vendeurs qui proposent des "+ produit + " sont :\n");
@@ -92,6 +92,19 @@ public class Village {
 			chaine.append("- "+ vendeur.getNom()+"\n");
 		}
 		return chaine.toString();
+	}
+	
+	public Etal rechercherEtal(Gaulois vendeur) {
+		return marche.trouverVendeur(vendeur);
+	}
+	
+	public String partirVendeur(Gaulois vendeur) {
+		Etal etalLibere= marche.trouverVendeur(vendeur);
+		return etalLibere.libererEtal();
+	}
+	
+	public String afficherMarche() {
+		return marche.afficherMarche();
 	}
 	
 	private static class Marche{
@@ -163,7 +176,7 @@ public class Village {
 				}
 			}
 			if (nbEtalsVides!=0) {
-				chaine.append("Il y a "+nbEtalsVides+" étals non utilisés dans le marché.\n");
+				chaine.append("Il y a "+nbEtalsVides+" Ã©tals non utilisÃ©s dans le marchÃ©.\n");
 			}
 			return chaine.toString();
 		}
