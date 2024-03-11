@@ -52,6 +52,12 @@ public class Etal {
 
 	public String acheterProduit(int quantiteAcheter, Gaulois acheteur) {
 		StringBuilder chaine = new StringBuilder();
+		if (quantiteAcheter<1) {
+			throw new IllegalArgumentException("La quantité à acheter doit être supérieure à 0.");
+		}
+		if (!this.isEtalOccupe()) {
+			throw new IllegalStateException("L'étal doit être occupé pour vendre");
+		}
 		try {
 			chaine.append(acheteur.getNom() + " veut acheter " + quantiteAcheter+ " " + produit + " à " + vendeur.getNom());
 			if (quantite == 0) {
